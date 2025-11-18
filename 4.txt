@@ -1,0 +1,32 @@
+I have used alpine-extended-3.19.0-x86_64.iso file for installation.
+
+Make sure you have internet connection and Enable the alpine repositories under /etc/apk/repositories
+Below are the list of commands used to install alpine linux, xorg base, video drivers, input device drivers and gnome and its utilities.
+
+###### Install alpine linux using script ##########
+1. setup-alpine
+####### It configures a graphical environment ########
+2. setup-xorg-base
+########### drivers ##############
+3. apk add pciutils
+4. apk add xf86-video-fbdev xf86-video-intel xf86-video-vesa xf86-input-vmmouse
+############# Install gnome and gnome utilities ####################
+5. apk add gnome gnome-shell gnome-desktop gnome-session gnome-colors gnome-colors-common gnome-clocks gnome-calendar gnome-panel gnome-calculator gnome-disk-utility gnome-system-monitor gnome-backgrounds gnome-tweaks gnome-music gnome-sound-recorder gnome-apps-core gnome-software gnome-font-viewer gnome-control-center gnome-contacts gnome-connections gnome-boxes gnome-browser-connector gnome-firmware gnome-flashback gnome-screenshot gedit blackbox-terminal black-bash-completion file-roller filezilla firefox libreoffice vim vlc vlc-dev vlc-libs vlc-daemon vlc-qt stalonetray networkmanager networkmanager-cli networkmanager-tui networkmanager-adsl networkmanager-common networkmanager-wifi networkmanager-openvpn networkmanager-ppp networkmanager-qt5 networkmanager-bluetooth networkmanager-bash-completion networkmanager-dnsmasq networkmanager-dev networkmanager-dbg networkmanager-ovs networkmanager-wwan networkmanager-elogind networkmanager-l2tp networkmanager-lang nautilus file-roller-nautilus font-manager
+############# Install Linux Headers ####################
+6. apk add linux-headers
+############### Add dbus,udev,gdm and networkmanager services to init system #################
+7. rc-update add dbus
+   rc-update add udev
+   rc-update add gdm
+   rc-update add networkmanager
+   reboot
+############### Install and VirtualBox Guest Additions and add its services to init system #################  
+8. apk add virtualbox-guest-additions virtualbox-guest-additions-x11
+   rc-update add virtualbox-guest-additions
+   rc-update add virtualbox-drm-client
+   poweroff
+############### Enable Guest Additions Features #################
+9. Enable Shared Clipboard, Drag and drop and Shared Folders and Start the Alpine Linux 3.19 VM. This time we succeeded Guest Additions and its working fine.
+
+WARNING!! - Some of the UI applications might not work for example gnome-terminal is not working for me so i have not installed gnome terminal instead i installed blackbox-terminal. Please check from your side
+what are the applications not working. 
