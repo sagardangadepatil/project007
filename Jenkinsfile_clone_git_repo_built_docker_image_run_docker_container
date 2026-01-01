@@ -1,0 +1,47 @@
+// Now that you have built the docker image so let's modify the go-test pipeline job to deploy an app using this docker image. Find below more details:
+// 1. Add an another step to run a docker container using the docker image you are building in this pipeline itself. Make sure to map container port 8000 with docker host port 8090. This is the step you can add:
+// sh "docker run -p 8090:8000 -d adminturneddevops/go-webapp-sample"
+// -------------
+
+pipeline {
+    agent {
+        label {
+            label 'master'
+            customWorkspace "${JENKINS_HOME}/${BUILD_NUMBER}/"
+        }
+    }
+    environment {
+        Go111MODULE='on'
+    }
+    stages {
+        stage('Clon git repo') {
+            steps {
+            // Cloning Git Repository kodekloudhub/go-webapp-sample.git
+            git 'https://github.com/kodekloudhub/go-webapp-sample.git'
+        }
+        }
+        stage('build docker image') {
+            steps {
+                script {
+                // to build a docker image from the cloned code.
+                // Build and tag the Docker image using the Dockerfile in the root of the repo
+                    def image = docker.build('adminturneddevops/go-webapp-sample')
+                // The 'image' variable now holds a reference to the built image
+                    echo "Docker image built and tagged as: ${image.id}"
+                }
+        }
+        }
+        stage('Run Docker Container') {
+            steps {
+                script {
+                    /* 
+                       Runs the image with:
+                       -p 8090:8000: Maps host port 8090 to container port 8000
+                       -d: Runs in detached mode
+                    */
+                    sh "docker run -p 8090:8000 -d adminturneddevops/go-webapp-sample"
+                }
+            }
+        }
+    }
+}
