@@ -1,0 +1,32 @@
+//  Add an another stage (name it as per your choice) to build a docker image from the cloned code. The required Jenkins plugins have already been installed i.e Docker and Docker pipeline. The image should be tagged as adminturneddevops/go-webapp-sample
+
+pipeline {
+    agent {
+        label {
+            label 'master'
+            customWorkspace "${JENKINS_HOME}/${BUILD_NUMBER}/"
+        }
+    }
+    environment {
+        Go111MODULE='on'
+    }
+    stages {
+        stage('Clon git repo') {
+            steps {
+            // Cloning Git Repository kodekloudhub/go-webapp-sample.git
+            git 'https://github.com/kodekloudhub/go-webapp-sample.git'
+        }
+        }
+        stage('build docker image') {
+            steps {
+                script {
+                // to build a docker image from the cloned code.
+                // Build and tag the Docker image using the Dockerfile in the root of the repo
+                    def image = docker.build('adminturneddevops/go-webapp-sample')
+                // The 'image' variable now holds a reference to the built image
+                    echo "Docker image built and tagged as: ${image.id}"
+                }
+        }
+        }
+    }
+}
